@@ -1,0 +1,15 @@
+Package: simplin
+Type: Package
+Title: Fitting Simple Linear Regression Models
+Version: 1.1.0
+Date: 2021-02-03
+Author: Xiangdong Meng
+Maintainer: Xiangdong Meng <mengxd@colostate.edu>
+Description: This package contains a function called simp_lin_R for fitting a simple linear regression model and return a list of estimated coefficients, their corresponding standard errors, 95\% confidence intervals, residuals and fitted values.
+License: GPL (>= 2)
+Imports: Rcpp (>= 1.0.6)
+LinkingTo: Rcpp
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

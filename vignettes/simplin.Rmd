@@ -1,0 +1,65 @@
+---
+title: "A Brief Introduction to the simplin Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{simplin}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+The $\texttt{simplin}$ package (short for Simple Linear) contains a function called $\texttt{simp_lin_R}$, which is aimed to fit a simple linear regression model for a given data set.
+
+Consider a data set $\{(x_i,y_i),i=1,2\ldots,n\}$. A simple linear regression model is of the form 
+$$
+y_i=\beta_0 + \beta_1x_i+\epsilon_i,
+$$
+where $y_i$ is called outcome, $x_i$ is called predictor, $\beta_0$ and $\beta_1$ are called regression coefficients and $\epsilon_i$ is the error term. Note that we call the model "simple" because it involves only one predictor.
+
+In order to get the best estimates of $\beta_0$ and $\beta_1$, we often apply the ordinary least square approch, which is due to Gauss. In this case, the problem can be restated as follows: find $\beta_0$ and $\beta_1$ which minimizes the quantity $Q(\beta_0,\beta_1) = \sum_{i=1}^n (y_i-\beta_0 - \beta_1 x_i)^2$. Using the first order condition, we can obtain the expressions of the "best" estimators:
+$$
+\hat{\beta_1} = \frac{\sum_{i=1}^n (x_i -\bar x) (y_i - \bar y)}{\sum_{i=1}^n(x_i - \bar x)^2},
+$$
+$$
+\hat{\beta_0}=\bar y - \hat{\beta_1}\bar x,
+$$
+where $\bar x = \frac{1}{n} \sum_{i=1}^n x_i$ and $\bar y = \frac{1}{n} \sum_{i=1}^n y_i$. Then the predicted values of $y_i$ is given by $\hat {y_i}=\hat{\beta_0} + \hat{\beta_1} x_i$. 
+
+In many cases, it is reasonable to assume $\epsilon_i \sim N(0,\sigma^2)$. Then we can get the OLS estimator for $\sigma^2$ as well as the sampling distributions of $\hat{\beta_0}$ and $\hat{\beta_1}$:
+$$
+\hat{\sigma}^2 = \frac{\sum_{i=1}^n (y_i - \hat{y_i})^2}{n-2},
+$$
+$$
+\hat{\beta_0} \sim N\left(\beta_0, \sigma^2\left[\frac{1}{n}+\frac{\bar x^2}{\sum_{i=1}^n(x_i - \bar x)^2} \right] \right),
+$$
+$$
+\hat{\beta_1} \sim N\left(\beta_1, \frac{\sigma^2}{\sum_{i=1}^n(x_i - \bar x)^2} \right).
+$$
+Let us see a toy example:
+```{r}
+library(simplin)
+#generate a data set
+x <- rnorm(100)
+y <- 2*x + 5 + rnorm(100, sd = 2)
+
+#fit a SLR model
+fit <- simp_lin_R(x,y)
+```
+
+We can use the symbol $\texttt{\$}$ to extract the coefficients, the standard errors, the confidence intervals and so on.
+```{r}
+fit$coef
+fit$CI
+```
+
+We can also plot the original data points as well as the fitted line.
+```{r}
+plot(x = x, y = y, main = "SLR Model")
+abline(a = fit$coef[1], b = fit$coef[2], lty = 2, col = "red", lwd = 3)
+```
+
+
+
+
+
+
+
+
